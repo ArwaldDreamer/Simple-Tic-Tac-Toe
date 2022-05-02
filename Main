@@ -1,0 +1,187 @@
+package tictactoe;
+
+import java.util.Scanner;
+
+    public class Main {
+        public static void main(String[] args) {
+
+            Scanner scan = new Scanner(System.in);
+
+            boolean gameFinished = false;
+            int count = 0;
+            boolean playing = false;
+            boolean turnX = true;
+
+            char[][] string = new char[3][3];
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    string[i][j] = '_';
+                }
+            }
+            printGrid(string);
+
+            while(count != 9) {
+                if (gameFinished) {
+                    break;
+                }
+                count++;
+                System.out.println("Enter the coordinates: ");
+
+                do {
+                    playing = false;
+                    String[] move = scan.nextLine().split(" ");
+                    int x = 0;
+                    int y = 0;
+                    try {
+                        x = Integer.parseInt(move[0]);
+                        y = Integer.parseInt(move[1]);
+                    } catch (NumberFormatException e) {
+                        System.out.println("You should enter numbers!");
+                        playing = true;
+                    }
+                    if ((x < 1 || x > 3) || y < 1 || y > 3) {
+                        System.out.println("Coordinates should be from 1 to 3!");
+                        playing = true;
+                    } else if (string[x - 1][y - 1] != '_') {
+                        System.out.println("This cell is occupied! Choose another one!");
+                        playing = true;
+                    }
+                    if (!playing) {
+                        if (turnX) {
+                            string[x - 1][y - 1] = 'X';
+                            turnX = false;
+                        }else {
+                            string[x - 1][y - 1] = 'O';
+                            turnX = true;
+                        }
+                    }
+                    printGrid(string);
+                    if (count >= 3) {
+                        if (getWin(string)) {
+                            gameFinished = true;
+                            break;
+                        }
+                    }
+
+                } while (playing);
+            }
+
+            if (!gameFinished) {
+                System.out.println("Draw");
+            }
+
+        }
+
+        public static void printGrid(char[][] string) {
+            System.out.println("---------");
+            for (int i = 0; i < 3; i ++){
+                System.out.print("| ");
+                for (int j = 0; j < 3; j++){
+                    System.out.print(string[i][j] + " ");
+                    if (j == 2){
+                        System.out.println("|");
+                    }
+                }
+            }
+            System.out.println("---------");
+        }
+
+        public static boolean getWin (char[][] string) {
+
+            int xWins = 0;
+            int oWins = 0;
+            boolean xWin = false;
+            boolean oWin = false;
+
+            for (int i = 0; i < 3; i++){
+                if (xWins == 3) {
+                    xWin = true;
+                }
+                if (oWins == 3) {
+                    oWin = true;
+                }
+                xWins = 0;
+                oWins = 0;
+                for (int j = 0; j < 3; j++){
+                    if (string[i][j] == 'X'){
+                        xWins++;
+                    }
+                    if (string[i][j] == 'O'){
+                        oWins++;
+                    }
+                }
+            }
+            if(xWins == 3) {
+                xWin = true;
+            }
+            if(oWins == 3) {
+                oWin = true;
+            }
+            for (int i = 0; i < 3; i++){
+                if (xWins == 3) {
+                    xWin = true;
+                }
+                if (oWins == 3) {
+                    oWin = true;
+                }
+                xWins = 0;
+                oWins = 0;
+                for (int j = 0; j < 3; j++){
+                    if (string[j][i] == 'X'){
+                        xWins++;
+                    }
+                    if (string[j][i] == 'O'){
+                        oWins++;
+                    }
+                }
+            }
+            if(xWins == 3) {
+                xWin = true;
+            }
+            if(oWins == 3) {
+                oWin = true;
+            }
+            xWins = 0;
+            oWins = 0;
+            for (int i = 0; i < 3; i++){
+                if (string[i][i] == 'X'){
+                    xWins++;
+                }
+                if (string[i][i] == 'O'){
+                    oWins++;
+                }
+            }
+            if(xWins == 3) {
+                xWin = true;
+            }
+            if(oWins == 3) {
+                oWin = true;
+            }
+            xWins = 0;
+            oWins = 0;
+            for (int i = 0; i < 3; i++){
+                if (string[2-i][i] == 'O'){
+                    oWins++;
+                }
+                if (string[2-i][i] == 'X'){
+                    xWins++;
+                }
+
+            }
+            if(xWins == 3) {
+                xWin = true;
+            }
+            if(oWins == 3) {
+                oWin = true;
+            }
+            if (xWin){
+                System.out.println("X wins");
+                return true;
+            }else if (oWin){
+                System.out.println("O wins");
+                return true;
+            }
+            return false;
+
+        }
+    }
